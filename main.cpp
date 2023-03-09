@@ -6,7 +6,9 @@
 // steps taken from: https://www.javatpoint.com/diffie-hellman-algorithm-in-java
 
 #include <iostream>
+#include <cassert>
 #include <cmath>
+#include <string>
 using namespace std;
 
 int PubVal(int x, int y, int z) {
@@ -23,12 +25,30 @@ int SymmetricKey(int x, int y, int z) {
     return temp % z;
 }
 
-int main() {
-    int pubkey_1 = 33;
-    int pubkey_2 = 8;
+int main(int argc, char *argv[]) {
 
-    int priv_1 = 3;
-    int priv_2 = 2;
+    // cout << "You have entered " << argc
+    //      << " arguments:" << "\n";
+  
+    // for (int i = 0; i < argc; ++i)
+    //     cout << argv[i] << "\n";
+    // cout << argc << endl;
+
+    if (argc != 5) {
+        cout << "Wrong amount of arguments! Exiting..." << endl;
+        return 0;
+    }
+    for (int i = 1; i < argc; ++i) {
+        if (!isdigit(*argv[i])) {
+            cout << "Argument \'" << *argv[i] << "\' is not a number! Exiting..." << endl;
+        }
+    }
+
+    int pubkey_1 = stoi(argv[1]);
+    int pubkey_2 = stoi(argv[2]);
+
+    int priv_1 = stoi(argv[3]);
+    int priv_2 = stoi(argv[4]);
 
     int pubval_1 = PubVal(pubkey_1, pubkey_2, priv_1);
     int pubval_2 = PubVal(pubkey_1, pubkey_2, priv_2);
@@ -36,7 +56,10 @@ int main() {
 
     int symm_1 = SymmetricKey(pubval_2, priv_1, pubkey_1);
     int symm_2 = SymmetricKey(pubval_1, priv_2, pubkey_1);
-    cout << "final: " << symm_1 << ", " << symm_2 << endl;
+    assert(symm_1 == symm_2);
+
+
+    cout << "The secret code is: " << symm_1 << endl;
 
     return 0;
 }
